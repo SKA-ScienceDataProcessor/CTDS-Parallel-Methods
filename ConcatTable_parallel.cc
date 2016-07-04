@@ -33,12 +33,16 @@
 #include <casacore/casa/Utilities/Assert.h>
 #include <casacore/casa/Exceptions/Error.h>
 #include <casacore/casa/iostream.h>
+#include <casacore/tables/Tables/ArrColDesc.h>
+#include <casacore/tables/Tables/ArrayColumn.h>
 
 #include <casacore/casa/namespace.h>
 
 #include <mpi.h>
 
 #include <string>
+
+#include "tictak.h"
 
 // <summary>
 // Test parallel for the ConcatTable class
@@ -47,48 +51,53 @@
 string filename;
 int mpiRank, mpiSize;
 int NrRows;
+IPosition data_pos;
 
 MPI_Status status;
+Array<Float> data_arr;
 
 // First build a description.
-void createTable(const String& name, Int stval, Int nrrow)
+void createTable(const String& name, Int nrrow)
 {
   // Build the table description.
-  TableDesc td;
-  td.addColumn (ScalarColumnDesc<Int>("aint"));
-  td.addColumn (ScalarColumnDesc<Float>("afloat"));
+  TableDesc td("", "1", TableDesc::Scratch);
+  td.addColumn (ArrayColumnDesc<Float>("data", data_pos, ColumnDesc::Direct));
   // Now create a new table from the description.
   SetupNewTable newtab(name, td, Table::New);
   Table tab(newtab, nrrow);
-  // Fill the table.
-  ScalarColumn<Int>   icol(tab, "aint");
-  ScalarColumn<Float> fcol(tab, "afloat");
+  /* Fill the table.*/
+
+ // define column objects and link them to the table
+  ArrayColumn<Float> data_col(tab, "data");
+ 
   for (Int i=0; i<nrrow; ++i) {
-    icol.put (i, i+stval);
-    fcol.put (i, i+stval+1.);
+      data_col.put (i, data_arr);
   }
 }
 
-void checkTable (Int stval, uInt nrow)
+void checkTable (uInt nrow)
 ///void checkTable (const Table& tab, uInt nkey, uInt nsubrow, Int stval,
 ///		 Bool reorder=True, uInt nrow=10)
 {
   Table tab("tConcatTable_tmp.conctab");
   AlwaysAssertExit (tab.nrow() == nrow);
-  /*
-  AlwaysAssertExit (tab.keywordSet().nfields() == nkey);
-  AlwaysAssertExit (tab.keywordSet().asInt("key1") == 1);
-  AlwaysAssertExit (tab.keywordSet().asString("key2") == "abc");
-  if (nkey == 3) {
-    AlwaysAssertExit (tab.keywordSet().asTable("keysub").nrow() == nsubrow);
-  }
-  */
-  ScalarColumn<Int> aint(tab, "aint");
-  ScalarColumn<Float> afloat(tab,  "afloat");
+  
+  ArrayColumn<Float> data(tab, "data");
+  //cout<<data.get(0)<<endl;
   for (uInt i=0; i<tab.nrow(); i++) {
-    AlwaysAssertExit (aint(i) == stval);
-    AlwaysAssertExit (afloat(i) == stval+1.);
-    ++stval;
+    Array<float> data_s=data.get(i); 
+    //2 d converted to a d array
+    Vector<float> data_s_con=data_s.reform(IPosition(1, data_s.nelements()));
+    Vector<float> data_s_rf=data_arr.reform(IPosition(1, data_arr.nelements()));
+
+    for(int j=0; j<data_arr.nelements(); j++){
+       if(data_s_rf[j] != data_s_con[j]){
+	  cout << "row = " << i << ", column = data, element = " << j << endl;
+	  cout << "write data value = " << data_s_con[j] << ", data_arr value = " << data_s_rf[j] << endl;
+	   exit(-1);
+        }
+    }
+
   }
 }
 
@@ -104,11 +113,18 @@ int main(int argc, char **argv)
   MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
 
-  if(argc < 1){
-     cout << "./ConcatTable_parallel (int)nrRows" << endl;
+  if(argc < 3){
+     cout << "./ConcatTable_parallel (int)nrRows (int)arrayX (int)arrayY" << endl;
      exit(1);
   }
   
+  data_pos = IPosition(2, atoi(argv[2]), atoi(argv[3]));
+  data_arr = Array<Float>(data_pos);
+
+  // put some data into the data array
+  indgen (data_arr);
+ // cout<<data_arr<<endl;
+
   NrRows = atoi(argv[1]);
 
   //according mpi process rank to define filename
@@ -121,7 +137,7 @@ int main(int argc, char **argv)
   char recvfilename[100];
 
   try {
-    createTable (filename, mpiRank*NrRows, NrRows); //
+    createTable (filename, NrRows); //
 
   //  send filename to process 0
     if(mpiRank>0){
@@ -141,7 +157,7 @@ int main(int argc, char **argv)
   //process 0 concatTable and checkTable 
     if(mpiRank==0){
       concatTables(names);
-      checkTable (0, NrRows*mpiSize);
+      checkTable (NrRows*mpiSize);
     }
   } catch (AipsError x) {
     cout << "Exception caught: " << x.getMesg() << endl;

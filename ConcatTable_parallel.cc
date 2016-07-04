@@ -1,6 +1,6 @@
-// (c) SHAO
+// (c) SHAO Shanghai Astronomical Observatory, Chinese Academy of Sciences
 // 
-// Nandan load 80, Shanghai WA 200030
+// 80 Nandan Road, Shanghai 200030
 // China
 //  
 // This library is free software: you can redistribute it and/or
@@ -121,7 +121,7 @@ int main(int argc, char **argv)
   char recvfilename[100];
 
   try {
-    createTable (filename, mpiRank*NrRows, NrRows);
+    createTable (filename, mpiRank*NrRows, NrRows); //
 
   //  send filename to process 0
     if(mpiRank>0){

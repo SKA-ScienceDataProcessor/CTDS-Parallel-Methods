@@ -92,18 +92,10 @@ void checkTable (Int stval, uInt nrow)
   }
 }
 
-void concatTables()
+void concatTables(Block<String> &names)
 {
-  Block<String> names(mpiSize);
-  names[0] = "tConcatTable3_tmp.tab0";
-  names[1] = "tConcatTable3_tmp.tab1";
-  names[2] = "tConcatTable3_tmp.tab2";
-//  cout<<names[0]<<names[1]<<names[2]<<endl;
-//  MPI_Barrier(MPI_COMM_WORLD);
-//  cout<<names[0]<<names[1]<<names[2]<<endl;
   Table concTab (names, Block<String>(), Table::Old, TSMOption(), "SUBDIR");
   concTab.rename ("tConcatTable_tmp.conctab", Table::New);
-//  MPI_Barrier(MPI_COMM_WORLD);
 }
 
 int main(int argc, char **argv)
@@ -129,30 +121,28 @@ int main(int argc, char **argv)
   char recvfilename[100];
 
   try {
-    createTable (filename, 0, NrRows);
-  //  createTable ("tConcatTable3_tmp.tab2", 10, 20);
-  //  createTable ("tConcatTable3_tmp.tab3", 30, 5);
+    createTable (filename, mpiRank*NrRows, NrRows);
 
   //  send filename to process 0
     if(mpiRank>0){
       MPI_Send(filename.c_str(),strlen(filename.c_str())+1,MPI_CHAR,0,99,MPI_COMM_WORLD);
       //cout<<"Rank="<<mpiRank<<","<<"filename="<<filename<<endl;
     }
-    else{
+    else{ //process 0 receive other process filename
       names[0]=filename;
       for(source=1;source<mpiSize;source++){
          MPI_Recv(recvfilename,sizeof(recvfilename),MPI_CHAR,source,99,MPI_COMM_WORLD,&status);
         // cout<<"Rank="<<source<<","<<"filename="<<recvfilename<<sizeof(recvfilename)<<endl;
          string s(recvfilename);
          names[source]=s;
-         cout<<"Rank="<<source<<","<<"filename="<<names[source]<<endl;
+       //  cout<<"Rank="<<source<<","<<"filename="<<names[source]<<endl;
       }     
     }
-   
- //   MPI_Barrier(MPI_COMM_WORLD);
-  
-  //  concatTables();
-  //  checkTable (0, NrRows*mpiSize);
+  //process 0 concatTable and checkTable 
+    if(mpiRank==0){
+      concatTables(names);
+      checkTable (0, NrRows*mpiSize);
+    }
   } catch (AipsError x) {
     cout << "Exception caught: " << x.getMesg() << endl;
     return 1;

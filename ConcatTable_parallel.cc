@@ -136,28 +136,47 @@ int main(int argc, char **argv)
   int source;
   char recvfilename[100];
 
-  try {
-    createTable (filename, NrRows); //
-
-  //  send filename to process 0
-    if(mpiRank>0){
-      MPI_Send(filename.c_str(),strlen(filename.c_str())+1,MPI_CHAR,0,99,MPI_COMM_WORLD);
-      //cout<<"Rank="<<mpiRank<<","<<"filename="<<filename<<endl;
-    }
-    else{ //process 0 receive other process filename
-      names[0]=filename;
-      for(source=1;source<mpiSize;source++){
-         MPI_Recv(recvfilename,sizeof(recvfilename),MPI_CHAR,source,99,MPI_COMM_WORLD,&status);
-        // cout<<"Rank="<<source<<","<<"filename="<<recvfilename<<sizeof(recvfilename)<<endl;
-         string s(recvfilename);
-         names[source]=s;
+ //  send filename to process 0
+  if(mpiRank>0){
+    MPI_Send(filename.c_str(),strlen(filename.c_str())+1,MPI_CHAR,0,99,MPI_COMM_WORLD);
+    //cout<<"Rank="<<mpiRank<<","<<"filename="<<filename<<endl;
+  }
+  else{ //process 0 receive other process filename
+    names[0]=filename;
+    for(source=1;source<mpiSize;source++){
+       MPI_Recv(recvfilename,sizeof(recvfilename),MPI_CHAR,source,99,MPI_COMM_WORLD,&status);
+       // cout<<"Rank="<<source<<","<<"filename="<<recvfilename<<sizeof(recvfilename)<<endl;
+       string s(recvfilename);
+       names[source]=s;
        //  cout<<"Rank="<<source<<","<<"filename="<<names[source]<<endl;
-      }     
-    }
+     }
+  }
+
+  try {
+    MPI_Barrier(MPI_COMM_WORLD);
+    createTable (filename, NrRows); //
+    MPI_Barrier(MPI_COMM_WORLD);
+    tictak_add((char*)"end",0);
   //process 0 concatTable and checkTable 
     if(mpiRank==0){
       concatTables(names);
-      checkTable (NrRows*mpiSize);
+  //  if will check Table delete follow comment  
+  //    checkTable (NrRows*mpiSize);
+        
+      float Seconds = tictak_total(0,0);
+      unsigned long long CellSize = atoi(argv[2])*atoi(argv[3])*sizeof(float);
+      unsigned long long TableSize = CellSize * NrRows;
+      int Mps = TableSize / Seconds / 1000000;
+
+      cout << "MB/s," << Mps;
+      cout << ",Seconds," << Seconds;
+      cout << ",TableSize(Byte)," << TableSize;
+      cout << ",NrRows," << NrRows;
+      cout << ",CellSize(Byte)," << CellSize;
+      cout << ",MpiSize," << mpiSize;
+      cout << ",Xlength," << atoi(argv[2]);
+      cout << ",Ylength," << atoi(argv[3]);
+      cout << endl;
     }
   } catch (AipsError x) {
     cout << "Exception caught: " << x.getMesg() << endl;

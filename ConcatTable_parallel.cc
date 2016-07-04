@@ -154,6 +154,7 @@ int main(int argc, char **argv)
 
   try {
     MPI_Barrier(MPI_COMM_WORLD);
+    tictak_add((char*)filename.c_str(),0);
     createTable (filename, NrRows); //
     MPI_Barrier(MPI_COMM_WORLD);
     tictak_add((char*)"end",0);

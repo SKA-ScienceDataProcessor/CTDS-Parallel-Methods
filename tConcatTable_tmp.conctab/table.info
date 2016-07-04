@@ -1,0 +1,14 @@
+Type = 
+SubType = 
+
+Virtual concatenation of the following tables:
+  SUBDIR/tConcatTable3_tmp.tab0
+  SUBDIR/tConcatTable3_tmp.tab1
+  SUBDIR/tConcatTable3_tmp.tab2
+  SUBDIR/tConcatTable3_tmp.tab3
+  SUBDIR/tConcatTable3_tmp.tab4
+  SUBDIR/tConcatTable3_tmp.tab5
+  SUBDIR/tConcatTable3_tmp.tab6
+  SUBDIR/tConcatTable3_tmp.tab7
+  SUBDIR/tConcatTable3_tmp.tab8
+  SUBDIR/tConcatTable3_tmp.tab9

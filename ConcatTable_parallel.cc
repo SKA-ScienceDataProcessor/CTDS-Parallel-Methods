@@ -56,6 +56,8 @@ IPosition data_pos;
 MPI_Status status;
 Array<Float> data_arr;
 
+string tablename;
+
 // First build a description.
 void createTable(const String& name, Int nrrow)
 {
@@ -79,7 +81,7 @@ void checkTable (uInt nrow)
 ///void checkTable (const Table& tab, uInt nkey, uInt nsubrow, Int stval,
 ///		 Bool reorder=True, uInt nrow=10)
 {
-  Table tab("tConcatTable_tmp.conctab");
+  Table tab(tablename);
   AlwaysAssertExit (tab.nrow() == nrow);
   
   ArrayColumn<Float> data(tab, "data");
@@ -104,7 +106,7 @@ void checkTable (uInt nrow)
 void concatTables(Block<String> &names)
 {
   Table concTab (names, Block<String>(), Table::Old, TSMOption(), "SUBDIR");
-  concTab.rename ("tConcatTable_tmp.conctab", Table::New);
+  concTab.rename (tablename, Table::New);
 }
 
 int main(int argc, char **argv)
@@ -113,8 +115,8 @@ int main(int argc, char **argv)
   MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
   MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
 
-  if(argc < 3){
-     cout << "./ConcatTable_parallel (int)nrRows (int)arrayX (int)arrayY" << endl;
+  if(argc < 5){
+     cout << "./ConcatTable_parallel (int)nrRows (int)arrayX (int)arrayY (string)tablename" << endl;
      exit(1);
   }
   
@@ -126,6 +128,7 @@ int main(int argc, char **argv)
  // cout<<data_arr<<endl;
 
   NrRows = atoi(argv[1]);
+  tablename = argv[4];
 
   //according mpi process rank to define filename
   stringstream filename_s;

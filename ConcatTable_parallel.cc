@@ -169,7 +169,7 @@ int main(int argc, char **argv)
         
       float Seconds = tictak_total(0,0);
       unsigned long long CellSize = atoi(argv[2])*atoi(argv[3])*sizeof(float);
-      unsigned long long TableSize = CellSize * NrRows;
+      unsigned long long TableSize = CellSize * NrRows * mpiSize;
       int Mps = TableSize / Seconds / 1000000;
 
       cout << "MB/s," << Mps;

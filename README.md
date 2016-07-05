@@ -1,2 +1,12 @@
 # CTDS-Parallel-Methods
-The ConcatTable class of Casacore Table Data System (CTDS) offers methods to virtually concattenate multiple physical tables (SubTable) into a single logical table (Master Table). Thus, in this program, we use diffrerents process written each underlying physical table in parallel. And use master process (rank = 0) to create the single logical table. This program provide an excellent scalability in I/O throughput since each physical table is only handled by an individual process, which naturally avoids inter-process synchronizations and parallel data alignment issues.
+
+This project demonstrates multiple methods to parallelise Casacore Table Data System (CTDS).
+Some example methods are:
+
+1, Parallel CTDS storage managers such as AdiosStMan.
+2, Concatenated tables as used in Multi-MesurementSet tables.
+3, Non-locking CTDS interface.
+
+Some benchmarking code are also included to provide a platform for comparing these methods.
+
+

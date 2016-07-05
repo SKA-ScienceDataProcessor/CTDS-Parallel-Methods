@@ -5,7 +5,7 @@ QUOTA="2000000000"
 
 for i in $(seq 1 10)
 do
-    for rows in $(seq 1000 1000 500000)
+    for rows in $(seq 200 200 1000)
     do
       for length in $(seq 9000 1000 9000)
       do
@@ -15,9 +15,9 @@ do
                 rm -rf $OUTPUT/*
             fi
 
-         RUNLINE="mpirun ./ConcatTable_parallel $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}_$1.casa"
+         RUNLINE="mpirun ./ConcatTable_parallel $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa"
          echo $RUNLINE
-        $RUNLINE >> log
+         $RUNLINE >> log
       done
     done
 done

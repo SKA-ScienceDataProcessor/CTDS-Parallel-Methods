@@ -6,7 +6,7 @@ else
 endif
 
 CCFLAGS=
-LDFLAGS=-lcasa_tables 
+LDFLAGS=-lcasa_tables -lcasa_casa
 TARGET= ConcatTable_parallel
 
 all: $(TARGET) cl

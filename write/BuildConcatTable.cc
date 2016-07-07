@@ -19,18 +19,9 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
-#include "BuildTable.h"
+#include "BuildConcatTable.h"
 
-BuildTable::BuildTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize){
-    tablename = pTablename;
-    mpisize = pMpisize;
-    rows = pRows;
+BuildConcatTable::BuildConcatTable(const string name){
+    tablename = name;
 }
-
-const string BuildTable::name()const{
-    return tablename;
-}
-
-
-
 

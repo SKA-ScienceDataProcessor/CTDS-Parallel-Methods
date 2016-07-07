@@ -21,16 +21,10 @@
 
 #include "BuildTable.h"
 
-BuildTable::BuildTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize){
-    tablename = pTablename;
-    mpisize = pMpisize;
-    rows = pRows;
-}
+class BuildConcatTable{
+    public:
+        BuildConcatTable(const string);
+        string tablename;
 
-const string BuildTable::name()const{
-    return tablename;
-}
-
-
-
+};
 

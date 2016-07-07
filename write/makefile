@@ -7,12 +7,13 @@ endif
 
 CCFLAGS=
 LDFLAGS=-lcasa_tables -lcasa_casa
-TARGET= ConcatWrite
+TARGET= write_benchmark
 
 all: $(TARGET) cl
 
 $(TARGET): $(TARGET:=.cc)
-	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) 
+#	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) 
+	$(CC) *.cc -o $@ $(CCFLAGS) $(LDFLAGS) 
 
 cl: 
 	rm -rf *.casa *.eps *.e* *.o* *.log *.ER *.OU

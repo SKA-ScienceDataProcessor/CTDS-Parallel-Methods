@@ -1,4 +1,4 @@
-// (c) SHAO Shanghai Astronomical Observatory, Chinese Academy of Sciences
+// (c) Shanghai Astronomical Observatory (SHAO), Chinese Academy of Sciences
 //
 // 80 Nandan Road, Shanghai 200030
 // China
@@ -17,26 +17,10 @@
 // with this library. If not, see <http://www.gnu.org/licenses/>.
 //
 // Any bugs, questions, concerns and/or suggestions please email to
-//   lbq@shao.ac.cn
+// lbq@shao.ac.cn
 
 
-#include <casacore/tables/Tables/TableDesc.h>
-#include <casacore/tables/Tables/SetupNewTab.h>
-#include <casacore/tables/Tables/Table.h>
-#include <casacore/tables/Tables/ScaColDesc.h>
-#include <casacore/tables/Tables/ScalarColumn.h>
-#include <casacore/tables/Tables/TableRecord.h>
-#include <casacore/tables/TaQL/ExprNode.h>
-#include <casacore/casa/Arrays/ArrayIO.h>
-#include <casacore/casa/Arrays/ArrayUtil.h>
-#include <casacore/casa/Containers/Block.h>
-#include <casacore/casa/Utilities/Assert.h>
-#include <casacore/casa/Exceptions/Error.h>
-#include <casacore/casa/iostream.h>
-#include <casacore/tables/Tables/ArrColDesc.h>
-#include <casacore/tables/Tables/ArrayColumn.h>
-
-#include <casacore/casa/namespace.h>
+#include "BuildTable.h"
 
 #include <mpi.h>
 
@@ -44,9 +28,6 @@
 
 #include "../tictak.h"
 
-// <summary>
-// Test parallel for the ConcatTable class
-// </summary>
 
 string filename;
 int mpiRank, mpiSize;
@@ -77,6 +58,12 @@ void createTable(const String& name, Int nrrow)
   }
 }
 
+void concatTables(Block<String> &names)
+{
+  Table concTab (names, Block<String>(), Table::Old, TSMOption(), "SUBDIR");
+  concTab.rename (tablename, Table::New);
+}
+
 void checkTable (uInt nrow)
 ///void checkTable (const Table& tab, uInt nkey, uInt nsubrow, Int stval,
 ///		 Bool reorder=True, uInt nrow=10)
@@ -103,11 +90,6 @@ void checkTable (uInt nrow)
   }
 }
 
-void concatTables(Block<String> &names)
-{
-  Table concTab (names, Block<String>(), Table::Old, TSMOption(), "SUBDIR");
-  concTab.rename (tablename, Table::New);
-}
 
 int main(int argc, char **argv)
 {

@@ -36,14 +36,23 @@
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/casa/namespace.h>
 
-class BuildTable{
+class ParallelTable{
     public:
-        BuildTable(const string, const unsigned int, const unsigned int);
-        const string name() const;
-    private:
+        ParallelTable(const string, const unsigned int, const unsigned int, const unsigned int);
+        ~ParallelTable();
+        Table* get_table();
+        const unsigned int row(unsigned int) const;
+        const unsigned int rows() const;
+        void addColumn(const ColumnDesc &columnDesc);
+        void createTable();
+    protected:
         string tablename;
-        unsigned int mpisize;
-        unsigned int rows;
+        unsigned int mpi_size;
+        unsigned int mpi_rank;
+        unsigned int rows_total;
+        unsigned int rows_per_process;
+        TableDesc *td;
+        Table *table;
 };
 
 

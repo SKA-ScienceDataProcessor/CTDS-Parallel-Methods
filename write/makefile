@@ -5,7 +5,7 @@ else
         CC=mpic++
 endif
 
-CCFLAGS=
+CCFLAGS=-g
 LDFLAGS=-lcasa_tables -lcasa_casa
 TARGET= write_benchmark
 

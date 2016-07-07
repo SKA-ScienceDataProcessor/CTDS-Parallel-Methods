@@ -19,18 +19,21 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
-#include "BuildTable.h"
+#include "ConcatParallelTable.h"
 
-BuildTable::BuildTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize){
-    tablename = pTablename;
-    mpisize = pMpisize;
-    rows = pRows;
+ConcatParallelTable::ConcatParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
+    :ParallelTable(pTablename, pRows, pMpisize, pMpirank)
+{
+
 }
 
-const string BuildTable::name()const{
-    return tablename;
+const unsigned int ConcatParallelTable::row(unsigned int i)const{
+    return i;
 }
 
+void ConcatParallelTable::createConcatTable(){
+
+}
 
 
 

@@ -19,12 +19,17 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
-#include "BuildTable.h"
+#include "ParallelTable.h"
 
-class BuildConcatTable{
+class ConcatParallelTable : public ParallelTable{
     public:
-        BuildConcatTable(const string);
-        string tablename;
+        ConcatParallelTable(const string, const unsigned int, const unsigned int, const unsigned int);
+        const unsigned int row(unsigned int) const;
+    protected:
+        void createConcatTable();
 
 };
+
+
+
 

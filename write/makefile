@@ -7,7 +7,7 @@ endif
 
 CCFLAGS=
 LDFLAGS=-lcasa_tables -lcasa_casa
-TARGET= ConcatTable_parallel
+TARGET= ConcatWrite
 
 all: $(TARGET) cl
 

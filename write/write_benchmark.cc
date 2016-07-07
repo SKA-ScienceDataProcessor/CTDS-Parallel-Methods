@@ -1,21 +1,21 @@
 // (c) SHAO Shanghai Astronomical Observatory, Chinese Academy of Sciences
-// 
+//
 // 80 Nandan Road, Shanghai 200030
 // China
-//  
+//
 // This library is free software: you can redistribute it and/or
 // modify it under the terms of the GNU General Public License as published
 // by the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
-//    
+//
 // This library is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
-//    
+//
 // You should have received a copy of the GNU General Public License along
 // with this library. If not, see <http://www.gnu.org/licenses/>.
-//   
+//
 // Any bugs, questions, concerns and/or suggestions please email to
 //   lbq@shao.ac.cn
 
@@ -42,12 +42,12 @@
 
 #include <string>
 
-#include "tictak.h"
+#include "../tictak.h"
 
 // <summary>
 // Test parallel for the ConcatTable class
 // </summary>
- 
+
 string filename;
 int mpiRank, mpiSize;
 int NrRows;
@@ -71,7 +71,7 @@ void createTable(const String& name, Int nrrow)
 
  // define column objects and link them to the table
   ArrayColumn<Float> data_col(tab, "data");
- 
+
   for (Int i=0; i<nrrow; ++i) {
       data_col.put (i, data_arr);
   }
@@ -83,11 +83,11 @@ void checkTable (uInt nrow)
 {
   Table tab(tablename);
   AlwaysAssertExit (tab.nrow() == nrow);
-  
+
   ArrayColumn<Float> data(tab, "data");
   //cout<<data.get(0)<<endl;
   for (uInt i=0; i<tab.nrow(); i++) {
-    Array<float> data_s=data.get(i); 
+    Array<float> data_s=data.get(i);
     //2 d converted to a d array
     Vector<float> data_s_con=data_s.reform(IPosition(1, data_s.nelements()));
     Vector<float> data_s_rf=data_arr.reform(IPosition(1, data_arr.nelements()));
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
      cout << "./ConcatTable_parallel (int)nrRows (int)arrayX (int)arrayY (string)tablename" << endl;
      exit(1);
   }
-  
+
   data_pos = IPosition(2, atoi(argv[2]), atoi(argv[3]));
   data_arr = Array<Float>(data_pos);
 
@@ -161,12 +161,12 @@ int main(int argc, char **argv)
     createTable (filename, NrRows); //
     MPI_Barrier(MPI_COMM_WORLD);
     tictak_add((char*)"end",0);
-  //process 0 concatTable and checkTable 
+  //process 0 concatTable and checkTable
     if(mpiRank==0){
       concatTables(names);
-  //  if will check Table delete follow comment  
+  //  if will check Table delete follow comment
   //    checkTable (NrRows*mpiSize);
-        
+
       float Seconds = tictak_total(0,0);
       unsigned long long CellSize = atoi(argv[2])*atoi(argv[3])*sizeof(float);
       unsigned long long TableSize = CellSize * NrRows * mpiSize;
@@ -187,7 +187,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  MPI_Finalize(); 
+  MPI_Finalize();
 
   return 0;
 }

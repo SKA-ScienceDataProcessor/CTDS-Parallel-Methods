@@ -20,13 +20,13 @@
 // lbq@shao.ac.cn
 
 
-#include "ConcatParallelTable.h"
+#include "../ConcatParallelTable.h"
 
 #include <mpi.h>
 
 #include <string>
 
-#include "../tictak.h"
+#include "../timing/tictak.h"
 
 
 string filename;

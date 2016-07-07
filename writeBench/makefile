@@ -8,12 +8,15 @@ endif
 CCFLAGS=-g
 LDFLAGS=-lcasa_tables -lcasa_casa
 TARGET= write_benchmark
+LIB=../libParallelTable.so
 
 all: $(TARGET) cl
 
-$(TARGET): $(TARGET:=.cc)
-#	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) 
-	$(CC) *.cc -o $@ $(CCFLAGS) $(LDFLAGS) 
+$(LIB):
+	cd ..; make;
+
+$(TARGET): $(TARGET:=.cc) $(LIB)
+	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) $(LIB)
 
 cl: 
 	rm -rf *.casa *.eps *.e* *.o* *.log *.ER *.OU

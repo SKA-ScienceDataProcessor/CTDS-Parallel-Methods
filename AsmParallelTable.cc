@@ -19,5 +19,32 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
+#include "AsmParallelTable.h"
 
+AsmParallelTable::AsmParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
+    :ParallelTable(pTablename, pRows, pMpisize, pMpirank)
+{
+    stman = new AdiosStMan("POSIX");
+    if(mpi_rank>0){
+        stringstream tablename_s;
+        tablename_s << "/tmp/rank" << mpi_rank << ".casa";
+        tablename = tablename_s.str();
+    }
+}
+
+// This function receives the MPI rank and the iterator from the benchmark code, and returns the row id that it should write to.
+const unsigned int AsmParallelTable::row(unsigned int i)const{
+    return mpi_rank * rows_per_process + i;
+}
+
+void AsmParallelTable::addColumn(const ColumnDesc &cd){
+    addColumnBalanced(cd);
+}
+
+void AsmParallelTable::createTable(){
+    SetupNewTable newtab(tablename, *td, Table::New);
+    AdiosStMan stman("POSIX");
+    newtab.bindAll(stman);
+    table = new Table(newtab, rows_total);
+}
 

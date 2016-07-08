@@ -22,6 +22,7 @@
 #ifndef PARALLELTABLE_H
 #define PARALLELTABLE_H
 
+#include <casacore/tables/DataMan/DataManager.h>
 #include <casacore/tables/Tables/TableDesc.h>
 #include <casacore/tables/Tables/SetupNewTab.h>
 #include <casacore/tables/Tables/Table.h>
@@ -61,6 +62,8 @@ class ParallelTable{
         unsigned int rows_per_process;
         TableDesc *td;
         Table *table;
+        DataManager *stman;
+
 };
 
 #endif

@@ -5,7 +5,7 @@ else
 endif
 
 CCFLAGS=
-LDFLAGS=-lcasa_tables -lcasa_casa
+LDFLAGS=-lcasa_tables -lcasa_casa -ladiosstman
 TARGET=ParallelTable
 DIRS=writeBench readBench
 

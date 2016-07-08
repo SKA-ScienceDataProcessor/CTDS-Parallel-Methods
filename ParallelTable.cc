@@ -27,6 +27,7 @@ ParallelTable::ParallelTable(const string pTablename, const unsigned int pRows, 
     tablename(pTablename),
     rows_total(pRows),
     rows_per_process(rows_total / mpi_size),
+    stman(0),
     table(0),
     td(0)
 {
@@ -42,6 +43,10 @@ ParallelTable::~ParallelTable(){
         delete td;
         td = 0;
     }
+    if (stman){
+        delete stman;
+        stman = 0;
+    }
 }
 
 
@@ -56,6 +61,9 @@ void ParallelTable::addColumnUnbalanced(const ColumnDesc &cd){
 
 void ParallelTable::createTableBalanced(unsigned int pRows){
     SetupNewTable newtab(tablename, *td, Table::New);
+    if (stman){
+        newtab.bindAll(*stman);
+    }
     table = new Table(newtab, pRows);
 }
 

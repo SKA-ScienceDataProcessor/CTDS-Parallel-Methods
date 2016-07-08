@@ -42,13 +42,18 @@ NolockParallelTable::~NolockParallelTable(){
     }
 }
 
+// This function receives the MPI rank and the iterator from the benchmark code, and returns the row id that it should write to.
+const unsigned int NolockParallelTable::row(unsigned int i)const{
+    return mpi_rank * rows_per_process + i;
+}
+
 void NolockParallelTable::addColumn(const ColumnDesc &cd){
     addColumnUnbalanced(cd);
 }
 
 void NolockParallelTable::createTable(){
     // On master rank, create a table and then close it.
-    createTableUnbalanced();
+    createTableUnbalanced(rows_total);
     MPI_Barrier(MPI_COMM_WORLD);
     // Then open the table on all ranks.
     for (int i=0; i<mpi_size; i++){

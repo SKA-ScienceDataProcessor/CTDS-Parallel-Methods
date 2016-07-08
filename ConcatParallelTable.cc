@@ -22,26 +22,47 @@
 #include "ConcatParallelTable.h"
 
 ConcatParallelTable::ConcatParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
-    :ParallelTable(pTablename, pRows, pMpisize, pMpirank)
+    :ParallelTable(pTablename, pRows, pMpisize, pMpirank),
+    master_tablename(pTablename)
 {
-
+    stringstream tablename_s;
+    tablename_s << pTablename << mpi_rank;
+    tablename = tablename_s.str();
 }
 
 const unsigned int ConcatParallelTable::row(unsigned int i)const{
     return i;
 }
 
-void ConcatParallelTable::createConcatTable(){
-
-}
-
-
 void ConcatParallelTable::addColumn(const ColumnDesc &cd){
-    addColumnUnbalanced(cd);
+    addColumnBalanced(cd);
 }
 
 void ConcatParallelTable::createTable(){
-    createTableUnbalanced();
+    createTableBalanced(rows_per_process);
+
+    // Close sub-tables first.
+    if(table){
+        delete table;
+    }
+
+    if (mpi_rank == 0){
+        // Concatenate sub-tables.
+        Block<String> names(mpi_size);
+        for (int i=0; i<mpi_size; i++){
+            stringstream tablename_s;
+            tablename_s << master_tablename << i;
+            names[i] = tablename_s.str();
+        }
+        Table concTab (names, Block<String>(), Table::Old, TSMOption(), "subtables");
+        concTab.rename (master_tablename, Table::New);
+    }
+
+    MPI_Barrier(MPI_COMM_WORLD);
+
+    // Re-open sub-tables.
+    tablename = master_tablename + "/subtables/" + tablename;
+    table = new Table(tablename, Table::Update);
 }
 
 

@@ -113,7 +113,7 @@ int main(int argc, char **argv)
     Array<Float> data_arr = Array<Float>(array_shape);
     indgen (data_arr);
 
-    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank);
+    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
     tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
     tab->createTable();
 
@@ -133,11 +133,9 @@ int main(int argc, char **argv)
     stringstream filename_s;
     filename_s << "tConcatTable3_tmp.tab" << mpiRank;
     filename = filename_s.str();
-    */
 
 
 
-    /*
     Block<String> names(mpiSize);
     int source;
     char recvfilename[100];

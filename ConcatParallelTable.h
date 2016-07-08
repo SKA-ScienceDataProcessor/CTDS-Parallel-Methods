@@ -27,9 +27,8 @@ class ConcatParallelTable : public ParallelTable{
         const unsigned int row(unsigned int) const;
         virtual void addColumn(const ColumnDesc &columnDesc);
         virtual void createTable();
-    protected:
-        void createConcatTable();
-
+    private:
+        string master_tablename;
 };
 
 

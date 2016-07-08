@@ -44,6 +44,7 @@ ParallelTable::~ParallelTable(){
     }
 }
 
+
 void ParallelTable::addColumnBalanced(const ColumnDesc &cd){
     td->addColumn (cd);
 }
@@ -53,18 +54,17 @@ void ParallelTable::addColumnUnbalanced(const ColumnDesc &cd){
         td->addColumn (cd);
 }
 
-void ParallelTable::createTableUnbalanced(){
+void ParallelTable::createTableBalanced(unsigned int pRows){
+    SetupNewTable newtab(tablename, *td, Table::New);
+    table = new Table(newtab, pRows);
+}
+
+void ParallelTable::createTableUnbalanced(unsigned int pRows){
     if (mpi_rank == 0){
         // On master rank, create a table and then close it.
         SetupNewTable newtab(tablename, *td, Table::New);
-        table = new Table(newtab, rows_total);
+        table = new Table(newtab, pRows);
         delete table;
-    }
-}
-void ParallelTable::createTableBalanced(){
-    if (mpi_rank == 0){
-        SetupNewTable newtab(tablename, *td, Table::New);
-        table = new Table(newtab, rows_total);
     }
 }
 
@@ -73,10 +73,6 @@ Table* ParallelTable::get_table(){
     return table;
 }
 
-// This function receives the MPI rank and the iterator from the benchmark code, and returns the row id that it should write to.
-const unsigned int ParallelTable::row(unsigned int i)const{
-    return mpi_rank * rows_per_process + i;
-}
 
 const unsigned int ParallelTable::rows()const{
     return rows_per_process;

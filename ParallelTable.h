@@ -45,15 +45,15 @@ class ParallelTable{
         ParallelTable(const string, const unsigned int, const unsigned int, const unsigned int);
         virtual ~ParallelTable();
         Table* get_table();
-        const unsigned int row(unsigned int) const;
+        virtual const unsigned int row(unsigned int) const = 0;
         const unsigned int rows() const;
         virtual void addColumn(const ColumnDesc &columnDesc)=0;
         virtual void createTable()=0;
     protected:
         void addColumnBalanced(const ColumnDesc &columnDesc);
         void addColumnUnbalanced(const ColumnDesc &columnDesc);
-        void createTableBalanced();
-        void createTableUnbalanced();
+        void createTableBalanced(unsigned int pRows);
+        void createTableUnbalanced(unsigned int pRows);
         string tablename;
         unsigned int mpi_size;
         unsigned int mpi_rank;

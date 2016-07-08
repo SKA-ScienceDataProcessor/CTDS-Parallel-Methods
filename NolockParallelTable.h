@@ -27,6 +27,8 @@ class NolockParallelTable : public ParallelTable{
         virtual ~NolockParallelTable();
         virtual void addColumn(const ColumnDesc &columnDesc);
         virtual void createTable();
+        const unsigned int row(unsigned int) const;
+    private:
 
 };
 

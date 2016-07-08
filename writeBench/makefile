@@ -19,10 +19,10 @@ $(TARGET): $(TARGET:=.cc) $(LIB)
 	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) $(LIB)
 
 cl: 
-	rm -rf *.tab *.eps *.e* *.o* *.log *.ER *.OU
+	rm -rf *.tab* *.eps *.e* *.o* *.log *.ER *.OU
 
 clean:cl 
-	rm -rf $(TARGET) *.dSYM *.so log
+	rm -rf $(TARGET) "$(TARGET) 2" "$(TARGET) 3" *.dSYM *.so log
 
 re: clean all
 

@@ -24,7 +24,6 @@
 AsmParallelTable::AsmParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
     :ParallelTable(pTablename, pRows, pMpisize, pMpirank)
 {
-    stman = new AdiosStMan("POSIX");
     if(mpi_rank>0){
         stringstream tablename_s;
         tablename_s << "/tmp/rank" << mpi_rank << ".casa";
@@ -43,7 +42,7 @@ void AsmParallelTable::addColumn(const ColumnDesc &cd){
 
 void AsmParallelTable::createTable(){
     SetupNewTable newtab(tablename, *td, Table::New);
-    AdiosStMan stman("POSIX");
+    AdiosStMan stman;
     newtab.bindAll(stman);
     table = new Table(newtab, rows_total);
 }

@@ -35,6 +35,10 @@ ParallelTable::ParallelTable(const string pTablename, const unsigned int pRows, 
 }
 
 ParallelTable::~ParallelTable(){
+    if (stman){
+        delete stman;
+        stman = 0;
+    }
     if (table){
         delete table;
         table = 0;
@@ -42,10 +46,6 @@ ParallelTable::~ParallelTable(){
     if (td){
         delete td;
         td = 0;
-    }
-    if (stman){
-        delete stman;
-        stman = 0;
     }
 }
 

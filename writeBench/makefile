@@ -5,9 +5,9 @@ else
         CC=mpic++
 endif
 
-CCFLAGS=-g
+CCFLAGS=
 LDFLAGS=-lcasa_tables -lcasa_casa
-TARGET= write_benchmark
+TARGET=write_benchmark
 LIB=../libParallelTable.so
 
 all: $(TARGET) cl
@@ -19,7 +19,7 @@ $(TARGET): $(TARGET:=.cc) $(LIB)
 	$(CC) $@.cc -o $@ $(CCFLAGS) $(LDFLAGS) $(LIB)
 
 cl: 
-	rm -rf *.casa *.eps *.e* *.o* *.log *.ER *.OU
+	rm -rf *.tab *.eps *.e* *.o* *.log *.ER *.OU
 
 clean:cl 
 	rm -rf $(TARGET) *.dSYM *.so log

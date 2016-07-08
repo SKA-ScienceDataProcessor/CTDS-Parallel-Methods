@@ -36,4 +36,12 @@ void ConcatParallelTable::createConcatTable(){
 }
 
 
+void ConcatParallelTable::addColumn(const ColumnDesc &cd){
+    addColumnUnbalanced(cd);
+}
+
+void ConcatParallelTable::createTable(){
+    createTableUnbalanced();
+}
+
 

@@ -21,24 +21,15 @@
 
 
 #include "../ConcatParallelTable.h"
-
-#include <mpi.h>
-
+#include "../NolockParallelTable.h"
+#include "../AsmParallelTable.h"
 #include <string>
-
 #include "../timing/tictak.h"
 
 
-string filename;
-int mpiRank, mpiSize;
-int NrRows;
-IPosition data_pos;
 
-MPI_Status status;
-Array<Float> data_arr;
 
-string tablename;
-
+/*
 
 void concatTables(Block<String> &names)
 {
@@ -72,54 +63,69 @@ void checkTable (uInt nrow)
     }
 }
 
-
 // First build a description.
 void addColumns(ParallelTable *tab)
 {
 
-    /*
     // Build the table description.
     TableDesc td("", "1", TableDesc::Scratch);
     // Now create a new table from the description.
     SetupNewTable newtab(name, td, Table::New);
     Table tab(newtab, nrrow);
-    */
 
 
     // define column objects and link them to the table
-    /*
-    ArrayColumn<Float> data_col(*(tab.get_table()), "data");
 
     for (Int i=0; i<nrrow; ++i) {
         data_col.put (i, data_arr);
     }
-    */
 }
+
+
+    */
 
 
 int main(int argc, char **argv)
 {
+    int rows, xsize, ysize;
+    string tablename;
+    int mpiRank, mpiSize;
+
     MPI_Init(0,0);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
 
     if(argc < 5){
-        cout << "./ConcatTable_parallel (int)nrRows (int)arrayX (int)arrayY (string)tablename" << endl;
-        exit(1);
+        cout << "./executable (int)nrRows (int)arrayX (int)arrayY (string)tablename" << endl;
+        rows = 10;
+        xsize = 20;
+        ysize = 30;
+        tablename = "tmp.tab";
+    }
+    else{
+        rows = atoi(argv[1]);
+        xsize = atoi(argv[2]);
+        ysize = atoi(argv[3]);
+        tablename = argv[4];
     }
 
-    data_pos = IPosition(2, atoi(argv[2]), atoi(argv[3]));
-    data_arr = Array<Float>(data_pos);
-
-    // put some data into the data array
+    IPosition array_shape = IPosition(2, xsize, ysize);
+    Array<Float> data_arr = Array<Float>(array_shape);
     indgen (data_arr);
 
-    NrRows = atoi(argv[1]);
-    tablename = argv[4];
-
-    ParallelTable *tab = new ConcatParallelTable(tablename, NrRows, mpiSize, mpiRank);
-    tab->addColumn (ArrayColumnDesc<Float>("data", data_pos, ColumnDesc::Direct));
+    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank);
+    tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
     tab->createTable();
+
+    ArrayColumn<Float> data_col(*(tab->get_table()), "data");
+
+    for (int i=0; i<tab->rows(); i++){
+        int row = tab->row(i);
+        data_arr = row+1;
+        cout << "mpi_rank = " << mpiRank << "  writing Row " << row <<endl;
+        data_col.put(tab->row(i), data_arr);
+    }
+
     delete tab;
 
     //according mpi process rank to define filename

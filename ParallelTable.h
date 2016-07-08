@@ -19,6 +19,9 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
+#ifndef PARALLELTABLE_H
+#define PARALLELTABLE_H
+
 #include <casacore/tables/Tables/TableDesc.h>
 #include <casacore/tables/Tables/SetupNewTab.h>
 #include <casacore/tables/Tables/Table.h>
@@ -35,17 +38,22 @@
 #include <casacore/tables/Tables/ArrColDesc.h>
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/casa/namespace.h>
+#include <mpi.h>
 
 class ParallelTable{
     public:
         ParallelTable(const string, const unsigned int, const unsigned int, const unsigned int);
-        ~ParallelTable();
+        virtual ~ParallelTable();
         Table* get_table();
         const unsigned int row(unsigned int) const;
         const unsigned int rows() const;
-        void addColumn(const ColumnDesc &columnDesc);
-        void createTable();
+        virtual void addColumn(const ColumnDesc &columnDesc)=0;
+        virtual void createTable()=0;
     protected:
+        void addColumnBalanced(const ColumnDesc &columnDesc);
+        void addColumnUnbalanced(const ColumnDesc &columnDesc);
+        void createTableBalanced();
+        void createTableUnbalanced();
         string tablename;
         unsigned int mpi_size;
         unsigned int mpi_rank;
@@ -55,5 +63,5 @@ class ParallelTable{
         Table *table;
 };
 
-
+#endif
 

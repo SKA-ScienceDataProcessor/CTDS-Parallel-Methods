@@ -46,6 +46,8 @@ void ConcatParallelTable::createTable(){
         delete table;
     }
 
+    MPI_Barrier(MPI_COMM_WORLD);
+
     if (mpi_rank == 0){
         // Concatenate sub-tables.
         Block<String> names(mpi_size);

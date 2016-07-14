@@ -56,8 +56,8 @@ int main(int argc, char **argv)
     indgen (data_arr);
 
     // define parallel table, add columns, and create table
-//    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
-    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
+    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
+//    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
 //    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank);
     tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
     tab->createTable();

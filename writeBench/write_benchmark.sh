@@ -1,8 +1,8 @@
 #!/bin/bash --login
 
 #OUTPUT="/share/home/ska/output"
-#OUTPUT="/scratch/pawsey0129/AdiosStMan/data"
-OUTPUT="/scratch2/mwasci/blao/CTDS_data"
+OUTPUT="/scratch/pawsey0129/AdiosStMan/data"
+#OUTPUT="/scratch2/mwasci/blao/CTDS_data"
 QUOTA="2000000000"
 
 for i in $(seq 1 10)
@@ -25,7 +25,7 @@ do
                 RUN="mpirun"
             fi 
  
-         RUNLINE="$RUN ./write_benchmark $rows $length $length ${rows}rows_${length}length_${i}.casa"
+         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa"
          echo $RUNLINE
          $RUNLINE >> log
       done

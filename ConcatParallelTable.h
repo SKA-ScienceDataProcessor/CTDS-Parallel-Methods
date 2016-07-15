@@ -29,6 +29,7 @@ class ConcatParallelTable : public ParallelTable{
         virtual void createTable();
     private:
         string master_tablename;
+        string sub_tablename;
 };
 
 

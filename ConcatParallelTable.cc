@@ -20,14 +20,23 @@
 // lbq@shao.ac.cn
 
 #include "ConcatParallelTable.h"
+#include "./string/strSplit.h"
 
 ConcatParallelTable::ConcatParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
     :ParallelTable(pTablename, pRows, pMpisize, pMpirank),
     master_tablename(pTablename)
 {
+    stringstream sub_tablename_s;
+    sub_tablename_s << pTablename;
+    sub_tablename = sub_tablename_s.str();
+
+    const char * split = "/";
+    sub_tablename = str_split(sub_tablename,split);
+
     stringstream tablename_s;
-    tablename_s << pTablename << mpi_rank;
+    tablename_s << sub_tablename << mpi_rank;
     tablename = tablename_s.str();
+
 }
 
 const unsigned int ConcatParallelTable::row(unsigned int i)const{
@@ -53,7 +62,7 @@ void ConcatParallelTable::createTable(){
         Block<String> names(mpi_size);
         for (int i=0; i<mpi_size; i++){
             stringstream tablename_s;
-            tablename_s << master_tablename << i;
+            tablename_s << sub_tablename << i;
             names[i] = tablename_s.str();
         }
         Table concTab (names, Block<String>(), Table::Old, TSMOption(), "subtables");

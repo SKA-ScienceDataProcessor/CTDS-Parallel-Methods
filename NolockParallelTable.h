@@ -20,15 +20,21 @@
 // lbq@shao.ac.cn
 
 #include "ParallelTable.h"
+#include <casacore/tables/DataMan/TiledShapeStMan.h>
+#include <casacore/tables/DataMan/StandardStMan.h>
 
 class NolockParallelTable : public ParallelTable{
     public:
-        NolockParallelTable(const string, const unsigned int, const unsigned int, const unsigned int);
+        NolockParallelTable(const string, const unsigned int, const unsigned int, const unsigned int, int, int, string);
         virtual ~NolockParallelTable();
         virtual void addColumn(const ColumnDesc &columnDesc);
         virtual void createTable();
         const unsigned int row(unsigned int) const;
     private:
+        int xsize, ysize;
+        IPosition *data_pos;
+        string nameStMan;
+
 
 };
 

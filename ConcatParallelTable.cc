@@ -36,7 +36,6 @@ ConcatParallelTable::ConcatParallelTable(const string pTablename, const unsigned
     stringstream tablename_s;
     tablename_s << sub_tablename << mpi_rank;
     tablename = tablename_s.str();
-
 }
 
 const unsigned int ConcatParallelTable::row(unsigned int i)const{

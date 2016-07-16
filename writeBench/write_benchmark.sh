@@ -25,7 +25,7 @@ do
                 RUN="mpirun"
             fi 
  
-         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa"
+         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa TiledShapeStMan"
          echo $RUNLINE
          $RUNLINE >> log
       done

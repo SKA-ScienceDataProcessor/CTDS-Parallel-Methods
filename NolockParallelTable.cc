@@ -21,8 +21,8 @@
 
 #include "NolockParallelTable.h"
 
-NolockParallelTable::NolockParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank)
-    :ParallelTable(pTablename, pRows, pMpisize, pMpirank)
+NolockParallelTable::NolockParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank, int xsize, int ysize, string nameStMan)
+    :ParallelTable(pTablename, pRows, pMpisize, pMpirank), xsize(xsize), ysize(ysize)
 {
 }
 
@@ -52,8 +52,13 @@ void NolockParallelTable::addColumn(const ColumnDesc &cd){
 }
 
 void NolockParallelTable::createTable(){
+    data_pos = new IPosition(2, xsize, ysize);
+    if(nameStMan == "TiledShapeStMan")  stman = new TiledShapeStMan("data", IPosition(2, (*data_pos)[0] / 10, (*data_pos)[1] / 10));
+    else stman = new StandardStMan;
+
     // On master rank, create a table and then close it.
     createTableUnbalanced(rows_total);
+
     MPI_Barrier(MPI_COMM_WORLD);
     // Then open the table on all ranks.
     for (int i=0; i<mpi_size; i++){

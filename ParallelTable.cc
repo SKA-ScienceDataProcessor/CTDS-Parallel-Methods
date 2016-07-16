@@ -71,6 +71,9 @@ void ParallelTable::createTableUnbalanced(unsigned int pRows){
     if (mpi_rank == 0){
         // On master rank, create a table and then close it.
         SetupNewTable newtab(tablename, *td, Table::New);
+        if (stman){
+           newtab.bindAll(*stman);
+        }
         table = new Table(newtab, pRows);
         delete table;
     }

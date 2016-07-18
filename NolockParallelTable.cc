@@ -22,7 +22,7 @@
 #include "NolockParallelTable.h"
 
 NolockParallelTable::NolockParallelTable(const string pTablename, const unsigned int pRows, const unsigned int pMpisize, const unsigned int pMpirank, int xsize, int ysize, string nameStMan)
-    :ParallelTable(pTablename, pRows, pMpisize, pMpirank), xsize(xsize), ysize(ysize)
+    :ParallelTable(pTablename, pRows, pMpisize, pMpirank), xsize(xsize), ysize(ysize), nameStMan(nameStMan)
 {
 }
 

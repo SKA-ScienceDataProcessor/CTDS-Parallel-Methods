@@ -1,0 +1,11 @@
+*~
+*.swp
+*.swo
+*.pyc
+*.so
+*.o
+*.dylib
+*.exe
+*.app
+*.run
+*.e*

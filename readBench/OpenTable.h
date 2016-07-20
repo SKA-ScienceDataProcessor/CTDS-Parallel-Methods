@@ -34,6 +34,7 @@ class OpenTable{
     public:
       OpenTable();
       virtual ~OpenTable();
+      virtual void openTable(const string tablename)=0;
 };
 
 #endif

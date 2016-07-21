@@ -1,3 +1,4 @@
+
 // (c) Shanghai Astronomical Observatory (SHAO), Chinese Academy of Sciences
 //
 // 80 Nandan Road, Shanghai 200030
@@ -18,6 +19,28 @@
 //
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
-#include "OpenTable.h"
+
+#include <casacore/tables/Tables/TableDesc.h>
+#include <casacore/tables/Tables/SetupNewTab.h>
+#include <casacore/tables/Tables/ScaColDesc.h>
+#include <casacore/tables/Tables/ScalarColumn.h>
+#include <casacore/tables/Tables/ArrColDesc.h>
+#include <casacore/tables/Tables/ArrayColumn.h>
+#include <casacore/casa/namespace.h>
+
+#include <vector>
+
+
+void embarrassing_read(unsigned int mpiRank, vector<string> tablename){
+    
+   Table table(tablename[mpiRank]);
+
+   AlwaysAssertExit (tab.nrow() == nrow);
+   ArrayColumn<Float> data(tab, "data");
+   for (uInt i=0; i<tab.nrow(); i++) {
+      Array<float> data_s=data.get(i);
+   }  
+}
+
 
 

@@ -7,7 +7,9 @@ endif
 
 CCFLAGS=
 LDFLAGS=-lcasa_tables -lcasa_casa
-TARGET=write_benchmark
+TARGET=write_benchmark \
+	generate_table
+
 LIB=../libParallelTable.so
 
 all: $(TARGET) cl

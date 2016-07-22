@@ -19,63 +19,35 @@
 // Any bugs, questions, concerns and/or suggestions please email to
 // lbq@shao.ac.cn
 
-#include "../ConcatParallelTable.h"
-#include "../NolockParallelTable.h"
-#include "../AsmParallelTable.h"
+#include "EmbarrassingRead.h"
 #include <string>
-#include "../timing/tictak.h"
-
+#include "../getFiles/getfiles.h"
+#include <mpi.h>
 
 int main(int argc, char **argv)
 {
-    int rows, xsize, ysize;
-    string tablename;
     int mpiRank, mpiSize;
-    string nameStMan;
+    string tablePath;
 
     MPI_Init(0,0);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
 
-    if(argc < 6){
-        cout << "./executable (int)nrRows (int)arrayX (int)arrayY (string)tablename (string)nameStMan" << endl;
-        rows = 10;
-        xsize = 20;
-        ysize = 30;
-        tablename = "tmp.tab";
-        nameStMan = "StandardStMan";
+    if(argc < 2){
+        cout << "./executable (string)tablePath" << endl;
+        tablePath = "./data";
     }
     else{
-        rows = atoi(argv[1]);
-        xsize = atoi(argv[2]);
-        ysize = atoi(argv[3]);
-        tablename = argv[4];
-        nameStMan = argv[5];
+        tablePath = atoi(argv[1]);
     }
-
-    // generate some data
-    IPosition array_shape = IPosition(2, xsize, ysize);
-    Array<Float> data_arr = Array<Float>(array_shape);
-    indgen (data_arr);
-
-    // define parallel table, add columns, and create table
-    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
-//    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
-//    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank, xsize, ysize, nameStMan);
-    tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
-    tab->createTable();
-
-    // put data in, which is the same as serial CTDS tables
-    ArrayColumn<Float> data_col(*(tab->get_table()), "data");
-    for (int i=0; i<tab->rows(); i++){
-        int row = tab->row(i);
-        data_arr = row+1;
-        cout << "mpi_rank = " << mpiRank << "  writing Row " << row <<endl;
-        data_col.put(tab->row(i), data_arr);
+    //EmbarrassingRead
+    vector<string> tablename=getFiles(tablePath);
+    if(mpiSize>tablename.size()){
+      cout<<"number of processes must less than or equal to number of tables!"<<endl;
+      exit(1);
     }
-
-    delete tab;
-
+    embarrassing_read(mpiRank, tablename);    
+    
     MPI_Finalize();
     return 0;
 }

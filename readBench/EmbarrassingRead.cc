@@ -24,13 +24,14 @@
 
 void embarrassing_read(unsigned int mpiRank, vector<string> tablename){
     
-   Table table(tablename[mpiRank]);
+   Table tab(tablename[mpiRank]);
 
-   AlwaysAssertExit (tab.nrow() == nrow);
+//   AlwaysAssertExit (tab.nrow() == nrow);
    ArrayColumn<Float> data(tab, "data");
    for (uInt i=0; i<tab.nrow(); i++) {
       Array<float> data_s=data.get(i);
-   }  
+   } 
+   cout<<"read "<<tablename[mpiRank]<<" finished"<<endl;
 }
 
 

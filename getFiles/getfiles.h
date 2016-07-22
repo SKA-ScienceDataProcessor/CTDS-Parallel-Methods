@@ -53,12 +53,13 @@ vector<string> getFiles(string cate_dir){
 /*
 int main(void){
     DIR *dir;
-    char basePath[100];
+//    char basePath[100];
 
+    string basePath="./output";
     ///get the current absoulte path  
-    memset(basePath, '\0', sizeof(basePath));
-    getcwd(basePath, 999);
-    printf("the current dir is : %s\n",basePath);
+//    memset(basePath, '\0', sizeof(basePath));
+//    getcwd(basePath, 999);
+//    printf("the current dir is : %s\n",basePath);
 
 
     cout<<endl<<endl;

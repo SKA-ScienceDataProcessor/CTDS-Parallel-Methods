@@ -1,3 +1,3 @@
 #!/bin/bash --login
 
-aprun -B ./read_benchmark
+aprun -B ./read_benchmark 

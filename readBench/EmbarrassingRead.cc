@@ -22,16 +22,18 @@
 
 #include "EmbarrassingRead.h"
 
-void embarrassing_read(unsigned int mpiRank, vector<string> tablename, string tablePath){
-    
-   Table tab(tablePath+"/"+tablename[mpiRank]);
+void embarrassing_read(unsigned int mpiRank, string tablename, string tablePath){
+   stringstream ss;
+   ss<<mpiRank;
+   string mpiRank_s = ss.str();
+   Table tab(tablePath + tablename + mpiRank_s);
 
 //   AlwaysAssertExit (tab.nrow() == nrow);
    ArrayColumn<Float> data(tab, "data");
    for (uInt i=0; i<tab.nrow(); i++) {
       Array<float> data_s=data.get(i);
    } 
-   cout<<"read "<<tablename[mpiRank]<<" finished"<<endl;
+   cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
 }
 
 

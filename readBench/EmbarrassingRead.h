@@ -29,4 +29,4 @@
 
 #include <vector>
 
-void embarrassing_read(unsigned int mpiRank, vector<string> tablename, string tablePath); 
+void embarrassing_read(unsigned int mpiRank, string tablename, string tablePath); 

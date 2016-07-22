@@ -22,9 +22,9 @@
 
 #include "EmbarrassingRead.h"
 
-void embarrassing_read(unsigned int mpiRank, vector<string> tablename){
+void embarrassing_read(unsigned int mpiRank, vector<string> tablename, string tablePath){
     
-   Table tab(tablename[mpiRank]);
+   Table tab(tablePath+"/"+tablename[mpiRank]);
 
 //   AlwaysAssertExit (tab.nrow() == nrow);
    ArrayColumn<Float> data(tab, "data");

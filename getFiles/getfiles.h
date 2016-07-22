@@ -28,10 +28,10 @@ vector<string> getFiles(string cate_dir){
         if(strcmp(ptr->d_name,".")==0 || strcmp(ptr->d_name,"..")==0)    ///current dir OR parrent dir  
                 continue;
         else if(ptr->d_type == 8)    ///file  
-            //printf("d_name:%s/%s\n",basePath,ptr->d_name);  
+           // printf("d_name:%s/%s\n",basePath,ptr->d_name);  
             files.push_back(ptr->d_name);
         else if(ptr->d_type == 10)    ///link file  
-            //printf("d_name:%s/%s\n",basePath,ptr->d_name);  
+           // printf("d_name:%s/%s\n",basePath,ptr->d_name);  
             continue;
         else if(ptr->d_type == 4)    ///dir  
         {

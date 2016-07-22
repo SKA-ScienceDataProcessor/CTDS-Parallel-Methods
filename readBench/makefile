@@ -11,7 +11,7 @@ TARGET=read_benchmark
 all: $(TARGET) cl
 
 $(TARGET): *.cc
-	$(CC) *.cc -o $(TARGET) $(CCFLAGS) $(LDFLAGS) -fPIC --shared
+	$(CC) *.cc -o $(TARGET) $(CCFLAGS) $(LDFLAGS) 
 
 cl:
 	rm -rf *.casa *.eps *.e* *.o* *.log *.ER *.OU

@@ -20,19 +20,17 @@
 // lbq@shao.ac.cn
 
 #include "EmbarrassingRead.h"
-#include <string>
 #include "../getFiles/getfiles.h"
-#include <mpi.h>
+#include <adios.h>
 
 int main(int argc, char **argv)
 {
     int mpiRank, mpiSize;
     string tablePath;
-
+    
     MPI_Init(0,0);
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
-
     if(argc < 2){
         cout << "./executable (string)tablePath" << endl;
         tablePath = "./data";
@@ -42,12 +40,17 @@ int main(int argc, char **argv)
     }
     //EmbarrassingRead
     vector<string> tablename=getFiles(tablePath);
+    for (int i=0; i<tablename.size(); i++)
+    {
+        cout<<tablename[i]<<endl;
+    }
+   
     if(mpiSize>tablename.size()){
       cout<<"number of processes must less than or equal to number of tables!"<<endl;
       exit(1);
     }
-    embarrassing_read(mpiRank, tablename);    
+    embarrassing_read(mpiRank, tablename, tablePath);    
     
-    MPI_Finalize();
+   MPI_Finalize();
     return 0;
 }

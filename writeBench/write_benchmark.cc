@@ -39,10 +39,10 @@ int main(int argc, char **argv)
 
     if(argc < 6){
         cout << "./executable (int)nrRows (int)arrayX (int)arrayY (string)tablename (string)nameStMan" << endl;
-        rows = 10;
+        rows = 1000;
         xsize = 20;
         ysize = 30;
-        tablename = "tmp.tab";
+        tablename = "/scratch/pawsey0129/AdiosStMan/data1/tmp.tab";
         nameStMan = "StandardStMan";
     }
     else{
@@ -59,8 +59,8 @@ int main(int argc, char **argv)
     indgen (data_arr);
 
     // define parallel table, add columns, and create table
-    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
-//    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
+//    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
+    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
 //    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank, xsize, ysize, nameStMan);
     tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
     tab->createTable();

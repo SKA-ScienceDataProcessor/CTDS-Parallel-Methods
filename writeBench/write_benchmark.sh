@@ -5,11 +5,11 @@ OUTPUT="/scratch/pawsey0129/AdiosStMan/data"
 #OUTPUT="/scratch2/mwasci/blao/CTDS_data"
 QUOTA="2000000000"
 
-for i in $(seq 1 10)
+for i in $(seq 1 1)
 do
-    for rows in $(seq 200 200 1000)
+    for rows in $(seq 1000 200 1000)
     do
-      for length in $(seq 90 10 90)
+      for length in $(seq 10 1000 10)
       do
          CHECK=$(du -s $OUTPUT | cut -f1)
             if [ "$CHECK" -gt "$QUOTA" ]; then
@@ -25,7 +25,8 @@ do
                 RUN="mpirun"
             fi 
  
-         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa TiledShapeStMan"
+#         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa TiledShapeStMan"
+         RUNLINE="$RUN ./write_benchmark $rows $length $length $OUTPUT/${rows}rows_${length}length_${i}.casa StandardStMan"
          echo $RUNLINE
          $RUNLINE >> log
       done

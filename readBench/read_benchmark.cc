@@ -42,16 +42,6 @@ int main(int argc, char **argv)
         tablename = atoi(argv[2]);
     }
     //EmbarrassingRead
-//    vector<string> tablename=getFiles(tablePath);
-//    for (int i=0; i<tablename.size(); i++)
-//    {
-//        cout<<tablename[i]<<endl;
-//    }
-   
-//    if(mpiSize>tablename.size()){
-//      cout<<"number of processes must less than or equal to number of tables!"<<endl;
-//      exit(1);
-//    }
    MPI_Barrier(MPI_COMM_WORLD); 
    embarrassing_read(mpiRank, tablename, tablePath);    
     

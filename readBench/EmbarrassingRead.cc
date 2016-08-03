@@ -1,4 +1,3 @@
-
 // (c) Shanghai Astronomical Observatory (SHAO), Chinese Academy of Sciences
 //
 // 80 Nandan Road, Shanghai 200030

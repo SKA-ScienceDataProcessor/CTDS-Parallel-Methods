@@ -29,5 +29,5 @@
 
 #include <vector>
 
-void random_read_multiTable(unsigned int mpiSize, string tablename, string tablePath);
-void random_read_singleTable(unsigned int mpiRank, string tablename);
+void random_read_multiTable(unsigned int Ntable, string tablename, string tablePath);
+void random_read_singleTable(string tablename);

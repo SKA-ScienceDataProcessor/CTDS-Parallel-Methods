@@ -87,7 +87,7 @@ int main(int argc, char** argv){
     string filename = argv[5];
     DataManager *stman = 0;
 
-    if(nameStMan == "AdiosStMan")  stman = new AdiosStMan("POSIX", "", 10, rows_per_process);
+    if(nameStMan == "AdiosStMan")  stman = new AdiosStMan;
     if(nameStMan == "StandardStMan")  stman = new StandardStMan;
     if(nameStMan == "TiledShapeStMan")  stman = new TiledShapeStMan("data", IPosition(2, (*data_pos)[0] / 10, (*data_pos)[1] / 10));
 

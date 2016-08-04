@@ -1,15 +1,15 @@
 #!/bin/bash --login
 
 #OUTPUT="/share/home/ska/output"
-OUTPUT="/scratch/pawsey0129/AdiosStMan/data"
+OUTPUT="/scratch/pawsey0129/AdiosStMan/data1"
 #OUTPUT="/scratch2/mwasci/blao/CTDS_data"
-QUOTA="2000000000"
+QUOTA="5000000000"
 
 for i in $(seq 1 1)
 do
     for rows in $(seq 1000 200 1000)
     do
-      for length in $(seq 10 1000 10)
+      for length in $(seq 9000 1000 9000)
       do
          CHECK=$(du -s $OUTPUT | cut -f1)
             if [ "$CHECK" -gt "$QUOTA" ]; then

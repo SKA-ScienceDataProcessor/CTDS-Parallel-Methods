@@ -67,11 +67,34 @@ int main(int argc, char **argv)
 
     // put data in, which is the same as serial CTDS tables
     ArrayColumn<Float> data_col(*(tab->get_table()), "data");
+    MPI_Barrier(MPI_COMM_WORLD);
+    tictak_add((char*)tablename.c_str(),0);
     for (int i=0; i<tab->rows(); i++){
         int row = tab->row(i);
         data_arr = row+1;
-        cout << "mpi_rank = " << mpiRank << "  writing Row " << row <<endl;
+        //debug statements
+        //cout << "mpi_rank = " << mpiRank << "  writing Row " << row <<endl;
         data_col.put(tab->row(i), data_arr);
+    }
+    MPI_Barrier(MPI_COMM_WORLD);
+    tictak_add((char*)"end",0);
+
+    if(mpiRank == 0){
+
+        float Seconds = tictak_total(0,0);
+        uint64_t CellSize = atoi(argv[2])*atoi(argv[3])*sizeof(float);
+        uint64_t TableSize = CellSize * rows;
+        int Mps = TableSize / Seconds / 1000000;
+
+        cout << "MB/s," << Mps;
+        cout << ",Seconds," << Seconds;
+        cout << ",TableSize(Byte)," << TableSize;
+        cout << ",NrRows," << rows;
+        cout << ",CellSize(Byte)," << CellSize;
+        cout << ",MpiSize," << mpiSize;
+        cout << ",Xlength," << atoi(argv[2]);
+        cout << ",Ylength," << atoi(argv[3]);
+        cout << endl;
     }
 
     delete tab;

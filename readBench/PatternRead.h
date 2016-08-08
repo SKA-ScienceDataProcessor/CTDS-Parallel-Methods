@@ -27,5 +27,4 @@
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/casa/namespace.h>
 
-void random_read_multiTable(unsigned int Ntable, string tablename, string tablePath);
-void random_read_singleTable(string tablename);
+void pattern_read(unsigned int mpiRank, string tablename, unsigned int mpiSize); 

@@ -1,8 +1,10 @@
 #!/bin/bash --login
 
+#source /HOME/ac_shao_tan_1/lbq/bashrc_CTDS
+
 #OUTPUT="/share/home/ska/output"
 OUTPUT="/scratch/pawsey0129/AdiosStMan/data1"
-#OUTPUT="/scratch2/mwasci/blao/CTDS_data"
+#OUTPUT="/WORK/ac_shao_tan_1/CTDS/data"
 QUOTA="5000000000"
 
 for i in $(seq 1 10)
@@ -21,6 +23,8 @@ do
                # NP=$(wc -l $PBS_NODEFILE | awk '{print $1}')
                # RUN="aprun -n$(( $NP / 16  )) -N1"
                 RUN="aprun -B"
+            elif [ "$VENDOR" == "Tianhe2" ]; then
+                RUN="yhrun -N $1 -n $2"
             else
                 RUN="mpirun"
             fi 

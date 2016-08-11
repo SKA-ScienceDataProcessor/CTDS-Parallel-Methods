@@ -21,18 +21,32 @@
 
 #include "EmbarrassingRead.h"
 
-void embarrassing_read(unsigned int mpiRank, string tablename, string tablePath){
+struct TableProperty embarrassing_read(unsigned int mpiRank, string tablename, string tablePath){
+   TableProperty TP;
+
    stringstream ss;
    ss<<mpiRank;
    string mpiRank_s = ss.str();
    Table tab(tablePath + tablename + mpiRank_s);
 
-//   AlwaysAssertExit (tab.nrow() == nrow);
    ArrayColumn<Float> data(tab, "data");
-   for (uInt i=0; i<tab.nrow(); i++) {
-      Array<float> data_s=data.get(i);
-   } 
+   unsigned int nrow = tab.nrow();
+   Array<float> data_s;
+   for (uInt i=0; i<nrow; i++) {
+      data_s=data.get(i);
+   }
+   unsigned int len = sqrt(data_s.nelements()); 
+   long CellSize = len*len*sizeof(float);   
+   long TableSize = CellSize * nrow;
+   TP.TableSize = TableSize;
+   TP.rows = nrow;
+   TP.xsize = len;
+   TP.ysize = len;
+
+   cout<<"TableSize = "<<TableSize<<","<<"rows = "<<nrow<<","<<"xsize = "<<len<<","<< "ysize = "<<len<<endl;
    cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
+
+   return TP;
 }
 
 

@@ -21,10 +21,14 @@
 
 #include "RandomRead.h"
 #include<time.h>
+
 #define random(x) (rand()%x)
+unsigned int tabRank;
+unsigned int rowsRank;
+
 
 void random_read_multiTable(unsigned int Ntable, string tablename, string tablePath){
-   srand((UInt)time(0));
+   srand((unsigned int)time(0));
    for (uInt m=0; m<Ntable; m++){
       tabRank = random(Ntable);
       stringstream ss;
@@ -36,16 +40,17 @@ void random_read_multiTable(unsigned int Ntable, string tablename, string tableP
       for (uInt i=0; i<tab.nrow(); i++) {
          Array<float> data_s=data.get(i);
       }
+   }
     //  cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
 }
 
 void random_read_singleTable(string tablename){
-   srand((UInt)time(0));
+   srand((unsigned int)time(0));
    Table tab(tablename);
    
    ArrayColumn<Float> data(tab, "data");
    for (uInt i=0; i<tab.nrow(); i++) {
-      rowsRank=random(tab.nrow())
+      rowsRank=random(tab.nrow());
       Array<float> data_s=data.get(rowsRank);
    }
 }

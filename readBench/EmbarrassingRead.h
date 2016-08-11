@@ -26,7 +26,17 @@
 #include <casacore/tables/Tables/ArrColDesc.h>
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/casa/namespace.h>
+#include <casacore/casa/Arrays/ArrayIO.h>
+#include <casacore/casa/iostream.h>
 
 #include <vector>
+#include <math.h>
 
-void embarrassing_read(unsigned int mpiRank, string tablename, string tablePath); 
+struct TableProperty{  
+long TableSize;
+int rows;
+int xsize;
+int ysize;
+};
+
+struct TableProperty embarrassing_read(unsigned int mpiRank, string tablename, string tablePath); 

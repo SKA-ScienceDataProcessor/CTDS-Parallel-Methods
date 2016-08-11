@@ -6,8 +6,8 @@ OUTPUT="../readBench/data"
 mkdir -p $OUTPUT
 QUOTA="2000000000"
 
-rows="500"
-length="200"
+rows="1000"
+length="500"
 
 CHECK=$(du -s $OUTPUT | cut -f1)
 if [ "$CHECK" -gt "$QUOTA" ]; then

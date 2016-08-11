@@ -27,9 +27,9 @@ void pattern_read(unsigned int mpiRank, string tablename, unsigned int mpiSize){
 
    ArrayColumn<Float> data(tab, "data");
    for (uInt i=0; i<rows_per_process; i++) {
-      Array<float> data_s=data.get(mpiRank * rows_per_process + i);
-   } 
-   cout<<"read table row ="<<mpiRank * rows_per_process + i<<", "<<"Rank="<<mpiRank<<endl;
+      Array<float> data_s=data.get(mpiRank * rows_per_process + i); 
+      cout<<"read table row ="<<mpiRank * rows_per_process + i<<", "<<"Rank="<<mpiRank<<endl;
+   }
 }
 
 

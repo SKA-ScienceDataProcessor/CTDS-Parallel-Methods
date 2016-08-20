@@ -45,11 +45,11 @@ int main(int argc, char **argv)
         tablePath = atoi(argv[1]);
         tablename = atoi(argv[2]);
     }
-    //EmbarrassingRead
+   
    MPI_Barrier(MPI_COMM_WORLD); 
    tictak_add((char*)tablename.c_str(),0);
-   TP = embarrassing_read(mpiRank, tablename, tablePath);
-//   pattern_read(mpiRank, tablename, mpiSize); 
+//   TP = embarrassing_read(mpiRank, tablename, tablePath);
+   TP = pattern_read(mpiRank, tablename, mpiSize); 
 //   random_read_multiTable(Ntable, tablename, tablePath);   
 //   random_read_singleTable(tablename); 
    MPI_Barrier(MPI_COMM_WORLD);

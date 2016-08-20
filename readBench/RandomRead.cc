@@ -26,31 +26,52 @@
 unsigned int tabRank;
 unsigned int rowsRank;
 
-
-void random_read_multiTable(unsigned int Ntable, string tablename, string tablePath){
-   srand((unsigned int)time(0));
-   for (uInt m=0; m<Ntable; m++){
-      tabRank = random(Ntable);
-      stringstream ss;
-      ss<<tabRank;
-      string tabRank_s = ss.str();
-      Table tab(tablePath + tablename + tabRank_s);
-
-      ArrayColumn<Float> data(tab, "data");
-      for (uInt i=0; i<tab.nrow(); i++) {
-         Array<float> data_s=data.get(i);
-      }
+unsigned int Random(int m, int n)
+{
+   int pos, dis;
+   if(m == n){
+      return m;
    }
-    //  cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
+   else if(m > n){
+      pos = n;
+      dis = m - n + 1;
+      return rand() % dis + pos;
+   }
+   else{
+      pos = m;
+      dis = n - m + 1;
+      return rand() % dis + pos;
+   }
 }
 
-void random_read_singleTable(string tablename){
+void random_read_multiTable(unsigned int mpiSize, string tablename, string tablePath){
    srand((unsigned int)time(0));
-   Table tab(tablename);
-   
+   tabRank = random(mpiSize);
+   stringstream ss;
+   ss<<tabRank;
+   string tabRank_s = ss.str();
+   Table tab(tablePath + tablename + tabRank_s);
+
    ArrayColumn<Float> data(tab, "data");
    for (uInt i=0; i<tab.nrow(); i++) {
-      rowsRank=random(tab.nrow());
+       Array<float> data_s=data.get(i);
+   }
+   cout<<"read "<<tablename+tabRank_s<<" finished, "<<"MpiSize="<<mpiSize<<endl;
+}
+
+void random_read_singleTable(unsigned int mpiRank, string tablename, unsigned int mpiSize){
+   srand((unsigned int)time(0));
+   Table tab(tablename);
+   if (mpiSize > tab.nrow()){
+      exit(-1);
+   }
+   
+   unsigned int rows_per_process = tab.nrow()/mpiSize;
+   
+   ArrayColumn<Float> data(tab, "data");
+   for (uInt i=0; i<rows_per_process; i++) {
+      rowsRank=Random(mpiRank * rows_per_process, (mpiRank + 1) * rows_per_process - 1);
       Array<float> data_s=data.get(rowsRank);
+      cout<<"read "<<tablename<<", "<<"row ="<<rowsRank<<", "<<"Rank="<<mpiRank<<endl;
    }
 }

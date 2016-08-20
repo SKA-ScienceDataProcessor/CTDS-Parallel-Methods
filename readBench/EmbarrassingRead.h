@@ -31,12 +31,6 @@
 
 #include <vector>
 #include <math.h>
-
-struct TableProperty{  
-long TableSize;
-int rows;
-int xsize;
-int ysize;
-};
+#include "readGlobal.h"
 
 struct TableProperty embarrassing_read(unsigned int mpiRank, string tablename, string tablePath); 

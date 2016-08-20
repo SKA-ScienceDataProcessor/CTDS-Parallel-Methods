@@ -42,7 +42,8 @@ void AsmParallelTable::addColumn(const ColumnDesc &cd){
 
 void AsmParallelTable::createTable(){
     SetupNewTable newtab(tablename, *td, Table::New);
-    AdiosStMan stman("POSIX", "", 10, rows_per_process);
+//    AdiosStMan stman("POSIX", "", 10, rows_per_process);
+    AdiosStMan stman;
     newtab.bindAll(stman);
     table = new Table(newtab, rows_total);
 }

@@ -27,4 +27,7 @@
 #include <casacore/tables/Tables/ArrayColumn.h>
 #include <casacore/casa/namespace.h>
 
-void pattern_read(unsigned int mpiRank, string tablename, unsigned int mpiSize); 
+#include <math.h>
+#include "readGlobal.h"
+
+struct TableProperty pattern_read(unsigned int mpiRank, string tablename, unsigned int mpiSize); 

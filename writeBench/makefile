@@ -6,7 +6,7 @@ else
 endif
 
 CCFLAGS=
-LDFLAGS=-lcasa_tables -lcasa_casa
+LDFLAGS=-lcasa_tables -lcasa_casa -ladiosstman
 TARGET=write_benchmark \
 	generate_table
 

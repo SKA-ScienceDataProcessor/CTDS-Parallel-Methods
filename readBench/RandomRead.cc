@@ -20,7 +20,7 @@
 // lbq@shao.ac.cn
 
 #include "RandomRead.h"
-#include<time.h>
+#include <time.h>
 
 #define random(x) (rand()%x)
 unsigned int tabRank;

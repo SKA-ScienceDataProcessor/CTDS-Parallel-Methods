@@ -43,8 +43,8 @@ struct TableProperty embarrassing_read(unsigned int mpiRank, string tablename, s
    TP.xsize = len;
    TP.ysize = len;
 
-   cout<<"TableSize = "<<TableSize<<","<<"rows = "<<nrow<<","<<"xsize = "<<len<<","<< "ysize = "<<len<<endl;
-   cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
+//   cout<<"TableSize = "<<TableSize<<","<<"rows = "<<nrow<<","<<"xsize = "<<len<<","<< "ysize = "<<len<<endl;
+//   cout<<"read "<<tablename+mpiRank_s<<" finished, "<<"Rank="<<mpiRank<<endl;
 
    return TP;
 }

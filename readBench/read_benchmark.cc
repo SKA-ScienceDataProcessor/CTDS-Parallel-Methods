@@ -37,13 +37,13 @@ int main(int argc, char **argv)
     MPI_Comm_rank(MPI_COMM_WORLD, &mpiRank);
     MPI_Comm_size(MPI_COMM_WORLD, &mpiSize);
     if(argc < 2){
-        cout << "./executable (string)tablePath" << endl;
-        tablePath = "/home/blao/CTDS-Parallel-Methods/readBench/data/";
+        cout << "./executable (string)tablePath (string)tablename" << endl;
+        tablePath = "/scratch/pawsey0129/AdiosStMan/CTDS-Parallel-Methods/readBench/data/";
         tablename = "Table";
     }
     else{
-        tablePath = atoi(argv[1]);
-        tablename = atoi(argv[2]);
+        tablePath = argv[1];
+        tablename = argv[2];
     }
    
    MPI_Barrier(MPI_COMM_WORLD); 

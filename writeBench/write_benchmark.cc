@@ -25,6 +25,35 @@
 #include <string>
 #include "../timing/tictak.h"
 
+#define CHECK_DEBUG
+
+Array<Float> data_arr;
+
+void checkTable (string tablename, nrow)
+///void checkTable (const Table& tab, uInt nkey, uInt nsubrow, Int stval,
+///              Bool reorder=True, uInt nrow=10)
+{
+  Table tab(tablename);
+  AlwaysAssertExit (tab.nrow() == nrow);
+
+  ArrayColumn<Float> data(tab, "data");
+  //cout<<data.get(0)<<endl;
+  for (uInt i=0; i<tab.nrow(); i++) {
+    Array<float> data_s=data.get(i);
+    //2 d converted to a d array
+    Vector<float> data_s_con=data_s.reform(IPosition(1, data_s.nelements()));
+    Vector<float> data_s_rf=data_arr.reform(IPosition(1, data_arr.nelements()));
+
+    for(int j=0; j<data_arr.nelements(); j++){
+       if(data_s_rf[j] != data_s_con[j]){
+          cout << "row = " << i << ", column = data, element = " << j << endl;
+          cout << "write data value = " << data_s_con[j] << ", data_arr value = " << data_s_rf[j] << endl;
+           exit(-1);
+        }
+    }
+
+  }
+}
 
 int main(int argc, char **argv)
 {
@@ -55,12 +84,12 @@ int main(int argc, char **argv)
 
     // generate some data
     IPosition array_shape = IPosition(2, xsize, ysize);
-    Array<Float> data_arr = Array<Float>(array_shape);
+    data_arr = Array<Float>(array_shape);
     indgen (data_arr);
 
     // define parallel table, add columns, and create table
-    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
-//    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
+//    ParallelTable *tab = new ConcatParallelTable(tablename, rows, mpiSize, mpiRank);
+    ParallelTable *tab = new AsmParallelTable(tablename, rows, mpiSize, mpiRank);
 //    ParallelTable *tab = new NolockParallelTable(tablename, rows, mpiSize, mpiRank, xsize, ysize, nameStMan);
     tab->addColumn (ArrayColumnDesc<Float>("data", array_shape, ColumnDesc::Direct));
     tab->createTable();
@@ -100,5 +129,8 @@ int main(int argc, char **argv)
     delete tab;
 
     MPI_Finalize();
+    #ifdef CHECK_DEBUG
+       checkTable(tablename, rows); 
+    #endif 
     return 0;
 }

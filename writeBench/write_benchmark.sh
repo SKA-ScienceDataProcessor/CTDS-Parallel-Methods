@@ -9,9 +9,9 @@ QUOTA="5000000000"
 
 for i in $(seq 1 10)
 do
-    for rows in $(seq 1000 200 1000)
+    for rows in $(seq 1500 200 1500)
     do
-      for length in $(seq 9000 1000 9000)
+      for length in $(seq 3000 1000 3000)
       do
          CHECK=$(du -s $OUTPUT | cut -f1)
             if [ "$CHECK" -gt "$QUOTA" ]; then

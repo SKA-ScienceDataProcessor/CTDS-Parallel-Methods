@@ -44,7 +44,8 @@ unsigned int Random(int m, int n)
    }
 }
 
-void random_read_multiTable(unsigned int mpiSize, string tablename, string tablePath){
+struct TableProperty random_read_multiTable(unsigned int mpiSize, string tablename, string tablePath){
+   TableProperty TP;
    srand((unsigned int)time(0));
    tabRank = random(mpiSize);
    stringstream ss;
@@ -52,14 +53,31 @@ void random_read_multiTable(unsigned int mpiSize, string tablename, string table
    string tabRank_s = ss.str();
    Table tab(tablePath + tablename + tabRank_s);
 
+   unsigned int nrow = tab.nrow();
+
    ArrayColumn<Float> data(tab, "data");
+   Array<float> data_s;
+
    for (uInt i=0; i<tab.nrow(); i++) {
-       Array<float> data_s=data.get(i);
+       data_s=data.get(i);
    }
-   cout<<"read "<<tablename+tabRank_s<<" finished, "<<"MpiSize="<<mpiSize<<endl;
+
+   unsigned int len = sqrt(data_s.nelements());
+   long CellSize = len*len*sizeof(float);
+   long TableSize = CellSize * nrow;
+   TP.TableSize = TableSize;
+   TP.rows = nrow;
+   TP.xsize = len;
+   TP.ysize = len;
+
+   cout<<"TableSize = "<<TableSize<<","<<"rows = "<<nrow<<","<<"xsize = "<<len<<","<< "ysize = "<<len<<endl;
+   cout<<"read "<<tablename<<" finished, "<<endl;
+
+   return TP;
 }
 
-void random_read_singleTable(unsigned int mpiRank, string tablename, unsigned int mpiSize){
+struct TableProperty random_read_singleTable(unsigned int mpiRank, string tablename, unsigned int mpiSize){
+   TableProperty TP;
    srand((unsigned int)time(0));
    Table tab(tablename);
    if (mpiSize > tab.nrow()){
@@ -67,11 +85,27 @@ void random_read_singleTable(unsigned int mpiRank, string tablename, unsigned in
    }
    
    unsigned int rows_per_process = tab.nrow()/mpiSize;
+   unsigned int nrow = tab.nrow();
    
    ArrayColumn<Float> data(tab, "data");
+   Array<float> data_s;
+
    for (uInt i=0; i<rows_per_process; i++) {
       rowsRank=Random(mpiRank * rows_per_process, (mpiRank + 1) * rows_per_process - 1);
-      Array<float> data_s=data.get(rowsRank);
-      cout<<"read "<<tablename<<", "<<"row ="<<rowsRank<<", "<<"Rank="<<mpiRank<<endl;
+      data_s=data.get(rowsRank);
    }
+
+   unsigned int len = sqrt(data_s.nelements());
+   long CellSize = len*len*sizeof(float);
+   long TableSize = CellSize * nrow;
+   TP.TableSize = TableSize;
+   TP.rows = nrow;
+   TP.xsize = len;
+   TP.ysize = len;
+
+   cout<<"TableSize = "<<TableSize<<","<<"rows = "<<nrow<<","<<"xsize = "<<len<<","<< "ysize = "<<len<<endl;
+   cout<<"read "<<tablename<<" finished, "<<"Rank="<<mpiRank<<endl;
+
+   return TP;
+
 }

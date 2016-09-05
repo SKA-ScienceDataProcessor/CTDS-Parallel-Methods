@@ -33,7 +33,7 @@ struct TableProperty pattern_read(unsigned int mpiRank, string tablename, unsign
 
    for (uInt i=0; i<rows_per_process; i++) {
       data_s=data.get(mpiRank * rows_per_process + i); 
-      cout<<"read table row ="<<mpiRank * rows_per_process + i<<", "<<"Rank="<<mpiRank<<endl;
+ //     cout<<"read table row ="<<mpiRank * rows_per_process + i<<", "<<"Rank="<<mpiRank<<endl;
    }
    unsigned int len = sqrt(data_s.nelements());
    long CellSize = len*len*sizeof(float);

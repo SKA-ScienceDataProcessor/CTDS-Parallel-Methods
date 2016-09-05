@@ -25,7 +25,7 @@
 #include <string>
 #include "../timing/tictak.h"
 
-#define CHECK_DEBUG
+//#define CHECK_DEBUG
 
 Array<Float> data_arr;
 
@@ -128,9 +128,11 @@ int main(int argc, char **argv)
 
     delete tab;
 
-    MPI_Finalize();
     #ifdef CHECK_DEBUG
-       checkTable(tablename, rows); 
-    #endif 
+       checkTable(tablename, rows);
+    #endif
+
+    MPI_Finalize();
+    
     return 0;
 }

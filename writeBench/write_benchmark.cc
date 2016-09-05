@@ -29,7 +29,7 @@
 
 Array<Float> data_arr;
 
-void checkTable (string tablename, nrow)
+void checkTable (string tablename, int nrow)
 ///void checkTable (const Table& tab, uInt nkey, uInt nsubrow, Int stval,
 ///              Bool reorder=True, uInt nrow=10)
 {

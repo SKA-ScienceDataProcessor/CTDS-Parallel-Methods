@@ -46,32 +46,32 @@ int main(int argc, char **argv)
         tablename = argv[2];
     }
    
-   MPI_Barrier(MPI_COMM_WORLD); 
+//   MPI_Barrier(MPI_COMM_WORLD); 
    tictak_add((char*)tablename.c_str(),0);
 //   TP = embarrassing_read(mpiRank, tablename, tablePath);
    TP = pattern_read(mpiRank, tablename, mpiSize); 
-//   TP = random_read_multiTable(Ntable, tablename, tablePath);   
-//   TP = random_read_singleTable(tablename); 
-   MPI_Barrier(MPI_COMM_WORLD);
+//   TP = random_read_multiTable(mpiSize, tablename, tablePath);   
+//   TP = random_read_singleTable(mpiRank, tablename,mpiSize); 
+//   MPI_Barrier(MPI_COMM_WORLD);
    tictak_add((char*)"end",0);
 
-   if(mpiRank == 0){
+   
 
-       float Seconds = tictak_total(0,0);
-       uint64_t CellSize = TP.xsize*TP.ysize*sizeof(float);
-       uint64_t TableSize = TP.TableSize;
-       int Mps = TableSize / Seconds / 1000000;
+   float Seconds = tictak_total(0,0);
+   uint64_t CellSize = TP.xsize*TP.ysize*sizeof(float);
+   uint64_t TableSize = TP.TableSize;
+   int Mps = TableSize / Seconds / mpiSize /1000000;
 
-       cout << "MB/s," << Mps;
-       cout << ",Seconds," << Seconds;
-       cout << ",TableSize(Byte)," << TableSize;
-       cout << ",NrRows," << TP.rows;
-       cout << ",CellSize(Byte)," << CellSize;
-       cout << ",MpiSize," << mpiSize;
-       cout << ",Xlength," << TP.xsize;
-       cout << ",Ylength," << TP.ysize;
-       cout << endl;
-   }
+   cout << "MB/s," << Mps;
+   cout << ",Seconds," << Seconds;
+   cout << ",TableSize(Byte)," << TableSize;
+   cout << ",NrRows," << TP.rows;
+   cout << ",CellSize(Byte)," << CellSize;
+   cout << ",MpiSize," << mpiSize;
+   cout << ",Xlength," << TP.xsize;
+   cout << ",Ylength," << TP.ysize;
+   cout << endl;
+   
  
    MPI_Finalize();
     return 0;

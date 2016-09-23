@@ -7,7 +7,7 @@ OUTPUT="/scratch/pawsey0129/AdiosStMan/data1"
 #OUTPUT="/WORK/ac_shao_tan_1/CTDS/data"
 QUOTA="5000000000"
 
-for i in $(seq 1 10)
+for i in $(seq 1 1)
 do
     for rows in $(seq 1500 200 1500)
     do

@@ -5,7 +5,7 @@
 #OUTPUT="/share/home/ska/output"
 OUTPUT="/scratch/pawsey0129/AdiosStMan/data1"
 #OUTPUT="/WORK/ac_shao_tan_1/CTDS/data"
-QUOTA="5000000000"
+QUOTA="500000000000"
 
 for i in $(seq 1 1)
 do

@@ -60,7 +60,8 @@ int main(int argc, char **argv)
    float Seconds = tictak_total(0,0);
    uint64_t CellSize = TP.xsize*TP.ysize*sizeof(float);
    uint64_t TableSize = TP.TableSize;
-   int Mps = TableSize / Seconds / mpiSize /1000000;
+   int Mps = TableSize / Seconds /1000000;
+//   int Mps = TableSize / Seconds * mpiSize /1000000;
 
    cout << "MB/s," << Mps;
    cout << ",Seconds," << Seconds;

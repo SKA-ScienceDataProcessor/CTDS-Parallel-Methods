@@ -49,9 +49,9 @@ int main(int argc, char **argv)
 //   MPI_Barrier(MPI_COMM_WORLD); 
    tictak_add((char*)tablename.c_str(),0);
 //   TP = embarrassing_read(mpiRank, tablename, tablePath);
-   TP = pattern_read(mpiRank, tablename, mpiSize); 
+//   TP = pattern_read(mpiRank, tablename, mpiSize); 
 //   TP = random_read_multiTable(mpiSize, tablename, tablePath);   
-//   TP = random_read_singleTable(mpiRank, tablename,mpiSize); 
+   TP = random_read_singleTable(mpiRank, tablename,mpiSize); 
 //   MPI_Barrier(MPI_COMM_WORLD);
    tictak_add((char*)"end",0);
 

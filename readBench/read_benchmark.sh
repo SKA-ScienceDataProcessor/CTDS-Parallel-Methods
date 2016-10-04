@@ -2,7 +2,7 @@
 
 source /home/blao/bashrc_AdiosStMan
 
-tablePath="/scratch/pawsey0129/AdiosStMan/CTDS-Parallel-Methods/readBench/data/"
+tablePath="/scratch/pawsey0129/AdiosStMan/data1/"
 tablename="Table0"
 
 

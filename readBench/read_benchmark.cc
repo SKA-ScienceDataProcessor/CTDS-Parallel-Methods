@@ -50,8 +50,8 @@ int main(int argc, char **argv)
    tictak_add((char*)tablename.c_str(),0);
 //   TP = embarrassing_read(mpiRank, tablename, tablePath);
 //   TP = pattern_read(mpiRank, tablename, mpiSize); 
-//   TP = random_read_multiTable(mpiSize, tablename, tablePath);   
-   TP = random_read_singleTable(mpiRank, tablename,mpiSize); 
+   TP = random_read_multiTable(mpiSize, tablename, tablePath);   
+//   TP = random_read_singleTable(mpiRank, tablename,mpiSize); 
 //   MPI_Barrier(MPI_COMM_WORLD);
    tictak_add((char*)"end",0);
 
@@ -60,8 +60,8 @@ int main(int argc, char **argv)
    float Seconds = tictak_total(0,0);
    uint64_t CellSize = TP.xsize*TP.ysize*sizeof(float);
    uint64_t TableSize = TP.TableSize;
-   int Mps = TableSize / Seconds /1000000;
-//   int Mps = TableSize / Seconds * mpiSize /1000000;
+//   int Mps = TableSize / Seconds /1000000;
+   int Mps = TableSize / Seconds * mpiSize /1000000;
 
    cout << "MB/s," << Mps;
    cout << ",Seconds," << Seconds;
